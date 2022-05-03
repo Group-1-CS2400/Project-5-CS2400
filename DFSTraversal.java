@@ -1,7 +1,6 @@
-public class DFSTraversal
-{
-    Algorithm getDepthFirstTraversal(originVertex)
-    traversalOrder = a new queue for the resulting traversal order
+public class DFSTraversal implements graphInterface{
+    
+}
     vertexStack = a new stack to hold vertices as they are visited
     Mark originVertex as visited
     traversalOrder.enqueue(originVertex)
