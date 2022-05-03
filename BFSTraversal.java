@@ -4,8 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-public class BFSTraversal implements graphInterface {
-    public void addVertex(String label) {
+public class BFSTraversal implements graphInterface 
+{
+    public void addVertex(String label) 
+    {
         adjVertices.putIfAbsent(new Vertex(label), new ArrayList<>());
     }
     
@@ -14,13 +16,15 @@ public class BFSTraversal implements graphInterface {
         adjVertices.values().stream().forEach(e -> e.remove(v));
         adjVertices.remove(new Vertex(label));
     }
-    public void addEdge(String label1, String label2) {
+    public void addEdge(String label1, String label2) 
+    {
         Vertex v1 = new Vertex(label1);
         Vertex v2 = new Vertex(label2);
         adjVertices.get(v1).add(v2);
         adjVertices.get(v2).add(v1);
     }
-    public void removeEdge(String label1, String label2) {
+    public void removeEdge(String label1, String label2) 
+    {
         Vertex v1 = new Vertex(label1);
         Vertex v2 = new Vertex(label2);
         List<Vertex> eV1 = adjVertices.get(v1);
