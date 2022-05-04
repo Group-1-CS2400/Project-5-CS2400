@@ -1,34 +1,30 @@
 import java.util.List;
-import java.util.Map;
-public interface graphInterface {
-    class Vertex {
-        String label;
-        Vertex(String label) {
-            this.label = label;
-        }
-        public Object remove(graphInterface.Vertex v) {
-            return null;
-        }
-    
-        // equals and hashCode
-    }
-    class Graph {
-        private Map<Vertex, List<Vertex>> adjVertices;
+import java.util.Queue;
+public interface GraphInterface<T> 
+{
+       /** Adds a given vertex to this graph.
+       @param vertexLabel  An object that labels the new vertex and is
+                           distinct from the labels of current vertices.
+       @return  True if the vertex is added, or false if not. */
+   public boolean addVertex(T vertexLabel);
+   /** Adds a weighted edge between two given distinct vertices that 
+       are currently in this graph. The desired edge must not already 
+       be in the graph. In a directed graph, the edge points toward
+       the second vertex given.
+       @param begin  An object that labels the origin vertex of the edge.
+       @param end    An object, distinct from begin, that labels the end
+                     vertex of the edge.
+       @param edgeWeight  The real value of the edge's weight.
+       @return  True if the edge is added, or false if not. */
+   public boolean addEdge(T begin, T end, double edgeWeight);
 
-        public void addVertex(String string) {
-        }
-
-        public void addEdge(String string, String string2) {
-        }
-        
-        // standard constructor, getters, setters
-    }
-    public void addVertex(String label);
-    //Stolen from online bc ur mom
-    public void removeVertex(String label);
-    ////Stolen from online bc ur mom
-    public void addEdge(String label1, String label2);
-    ////Stolen from online bc ur mom
-    public void removeEdge(String label1, String label2);
-    //Stolen from online bc ur mom
+   /** Adds an unweighted edge between two given distinct vertices 
+       that are currently in this graph. The desired edge must not
+       already be in the graph. In a directed graph, the edge points 
+       toward the second vertex given.
+       @param begin  An object that labels the origin vertex of the edge.
+       @param end    An object, distinct from begin, that labels the end
+                     vertex of the edge.
+       @return  True if the edge is added, or false if not. */
+   public boolean addEdge(T begin, T end);
 }
