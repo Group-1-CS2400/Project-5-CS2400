@@ -39,6 +39,7 @@ public class Graph<T>
         edges[source][target] = true;
     }
 
+ 
     public int[] neighbors(int vertex)
     {
         int countNumber;
@@ -47,19 +48,20 @@ public class Graph<T>
 
         for(countNumber = 0; countNumber < labels.length; countNumber++)
         {
-            if(edges[vertex][count])
+            if(edges[vertex][countNumber])
                 count++;
         }
         answer = new int[count];
         count = 0;
         for(countNumber = 0; countNumber < labels.length; countNumber++)
         {
-            if(edges[vertex][count])
+            if(edges[vertex][countNumber])
                 answer[count++] = countNumber;
         }
 
         return answer;
     }
+
 
     //Remove an edge
     public void removeEdge(int source, int target)
