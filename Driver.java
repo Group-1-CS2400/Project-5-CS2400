@@ -1,5 +1,8 @@
 public class Driver
 {
+	// THIS WAS NOT OUR DRIVER
+	// TAKEN FROM ANOTHER STUDENT, HELPED US INITIALIZE THE CODE AND LET US USE THE METHOD THEY DID TO ASSIGN VALUE TO EACH LETTER
+	// AGAIN, TAKEN FROM SOMEONE ELSE.
    public static Graph<String> buildGraph()
 	{
 		Graph<String> graph = new Graph<String>(9);
@@ -71,8 +74,8 @@ public class Driver
 
       System.out.println();
       Graph<String> graph = buildGraph();
-	  String origin = new String( "B" );
+	  String origin = new String( "A" );
       QueueInterface<String> dft = graph.DFSTraversal(origin);
-		System.out.println(outputGraphTraversal(dft));
+	  System.out.println(outputGraphTraversal(dft));
    }   
 }
