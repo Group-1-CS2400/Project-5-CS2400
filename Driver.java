@@ -1,13 +1,8 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
-import java.util.HashMap;
 public class Driver
 {
-    public static Graph<String> buildGraph()
-    {
-    Graph<String> graph = new Graph<String>(9);
+   public static Graph<String> buildGraph()
+	{
+		Graph<String> graph = new Graph<String>(9);
 		
 		graph.setLabel(0, "A");
 		graph.setLabel(1, "B");
@@ -18,7 +13,6 @@ public class Driver
 		graph.setLabel(6, "G");
 		graph.setLabel(7, "H");
 		graph.setLabel(8, "I");
-
 		
 		graph.addEdge(0, 1);
 		graph.addEdge(0, 3);
@@ -35,25 +29,50 @@ public class Driver
 		graph.addEdge(8, 5);
 		
 		return graph;
-    }
-        public static void main(String[] args) throws Exception
+	}
+	
+	public static String outputGraphTraversal(QueueInterface<String> traversal)
+	{
+		String answer = new String();
+		while (!traversal.isEmpty())
+		{
+			answer = answer + traversal.dequeue().toString() ;
+		}
+		
+		return answer;
+	}
+
+   public static void main (String[] args) throws Exception
    {
-      Graph<String> bread = new Graph<String>(9);
+      Graph<String> BFT = new Graph<String>(9);
       String[] alpha = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
       for(int i = 0; i < alpha.length; i++)
-         bread.setLabel(i, alpha[i]);
-      bread.addEdge(0, 1);
-      bread.addEdge(0, 3);
-      bread.addEdge(0, 4);
-      bread.addEdge(1, 4);
-      bread.addEdge(2, 1);
-      bread.addEdge(3, 6);
-      bread.addEdge(4, 5);
-      bread.addEdge(4, 7);
-      bread.addEdge(5, 2);
-      bread.addEdge(5, 7);
-      bread.addEdge(6, 7);
-      bread.addEdge(7, 8); 
-      bread.addEdge(8, 5);
-    }
+        BFT.setLabel(i, alpha[i]);
+     BFT.addEdge(0, 1);
+     BFT.addEdge(0, 3);
+     BFT.addEdge(0, 4);
+     BFT.addEdge(1, 4);
+     BFT.addEdge(2, 1);
+     BFT.addEdge(3, 6);
+     BFT.addEdge(4, 5);
+     BFT.addEdge(4, 7);
+     BFT.addEdge(5, 2);
+     BFT.addEdge(5, 7);
+     BFT.addEdge(6, 7);
+     BFT.addEdge(7, 8); 
+     BFT.addEdge(8, 5);
+
+      QueueInterface<String> test;
+      test = BFT.BFSTraversal(0);
+      while (!test.isEmpty())
+      {
+         System.out.print(test.dequeue());
+      }
+
+      System.out.println();
+      Graph<String> graph = buildGraph();
+	  String origin = new String( "B" );
+      QueueInterface<String> dft = graph.DFSTraversal(origin);
+		System.out.println(outputGraphTraversal(dft));
+   }   
 }
