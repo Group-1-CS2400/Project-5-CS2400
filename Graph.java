@@ -1,95 +1,230 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
-import java.util.HashMap;
-public class Graph<String>
+public class Graph<T>
 {
-    private boolean[][] graphEdges; 
-    private String[] graphLabels; 
-    private boolean[] visitedNodes;
-//This initializes a graph by itself without any values in order to have the graph made for input by the driver.
-// A constructor method for the graph 
-    public Graph(int n)
-    {
-        graphLabels = (String[]) new Object[n]; 
-        visitedNodes= new boolean[graphLabels.length];
-        graphEdges = new boolean[n][n];
-        //since the value of the array is starting at 0 the lenght must also take into account the 0 value.
-        for (int i=0;i<=graphLabels.length-1;i++)
-        //checks to see if the node itself is visited and marks it false because all these node values are null/not true 
-			visitedNodes[i]=false;
+
+
+    //This constructer lets us make the graph empty before filling it out 
+    //Setting the open arrays to allow us to construct the graph. 
+    private boolean[][] edges; 
+    private T[] labels;
+    private boolean[] visitedVertices;
+
+    public Graph(int initialize){
+        edges = new boolean[initialize][initialize]; 
+        labels = (T[]) new Object[initialize]; 
+        visitedVertices = new boolean[labels.length];
+        for (int i=0;i<=labels.length-1;i++)
+			visitedVertices[i]=false;
     }
-/*
- * 
- * 
- * These methods all declare the labels and edges, allowing us to add whatever node we chose to
- * The neighbor method works to show the neighbor and what is connected to what
- * these connections and labels all are defined in the driver and allow the user or coder to alter the code without coming here
- * 
- * 
- * 
- */
- // Allows us to set the vertex instead of having just 1` static one that we cannot manipulate and search through after we do it
-    public void setLabel(int vertex, String newLabel)
+//----------------------------------------------------------------------------------------------------------------//
+   /*
+   //These methods all work to establish what we need for the BFS traversal method 
+   //The focus of these methods is to mark the linkage between the nodes and their respective neighbors in the driver
+   //In the driver we marked the string values and letters to the corresponding integer values and weights
+   // by setting the "target values" as the neighbors to the vertex or specific node that is connected , we establish the link
+   // getting and setting these links here allows us to use it later on in the file.
+   */
+
+    public T getLabel(int vertex)
     {
-       graphLabels[vertex] = newLabel;
-    }  
-//lets us see what is the vertex at the current position of the code and loop
-    public String getLabel(int vertex)
-    {
-        System.out.println(graphLabels[vertex]);
-        return graphLabels[vertex];
+        return labels[vertex];
     }
-   
- // establishes the method to add a link between nodes/vertexes in the driver file.
-    public void addEdge(int source, int target)
-    {
-        graphEdges[source][target] = true;
-    }
-//returns a boolean value on weather or not we established a link between the vertex and their neighbor in the driver file.
+
     public boolean isEdge(int source, int target)
     {
-        return graphEdges[source][target];
+        return edges[source][target];
     }
-    /*
-    * This method is allowing the code to view the neighbors of the vertex that we assigned
-    * gives us the direct link from the vertex to whatever we choose to connect it to
-    */
+
+    public void addEdge(int source, int target)
+    {
+        edges[source][target] = true;
+    }
+
     public int[] neighbors(int vertex)
     {
-        int i;
-        int[] answer;
+        int countNumber;
         int count = 0;
-        
+        int[] answer;
 
-        for(i = 0; i <graphLabels.length; i++)
+        for(countNumber = 0; countNumber < labels.length; countNumber++)
         {
-            if(graphEdges[vertex][i])
+            if(edges[vertex][count])
                 count++;
         }
         answer = new int[count];
         count = 0;
-        for(i = 0; i <graphLabels.length; i++)
+        for(countNumber = 0; countNumber < labels.length; countNumber++)
         {
-            if(graphEdges[vertex][i])
-                answer[count++] = i;
+            if(edges[vertex][count])
+                answer[count++] = countNumber;
         }
 
         return answer;
     }
-    public QueueInterface<String> BFSTraversal (int originVertex)
-    { 
-        //we established 2 queues to store what we passed by and what we visited
-        // also established a list array that will tell us if we have visted the vertex's neighbors before
-        boolean[] visitedNodes = new boolean[(graphLabels.length)];
-        QueueInterface<String> vertQueue = new ArrayQueue<>(); //stfu error bitch
-        QueueInterface<String> travQueue = new ArrayQueue<>();
-       
-        visitedNodes[0]= true; //this is the vertex
-        
-        return travQueue;
+
+    //Remove an edge
+    public void removeEdge(int source, int target)
+    {
+        edges[source][target] = false;
     }
 
+    //Change the label of a vertex of this Graph
+    public void setLabel(int vertex, T newLabel)
+    {
+        labels[vertex] = newLabel;
+    }
+
+    //Accessor method to determine the number of vertices in this Graph
+    public int size()
+    {
+        return labels.length;
+    }
+    //------------------------------------------------------------------------------------------------------------//
+    /*
+    //These next methods are all meant for the depth traversal
+    // In depth traversal, the goal of the vertex and its neighbors is to go as far as possible before retracting nodes.
+    // By setting these methods up, we can see where we have been and where we need to go to access nodes that havent been 
+    // accessed before. 
+    */
+    private int getVertexIndex(T vertex)
+	{
+		int vertexIndex = 0;
+		while (!vertex.equals(labels[vertexIndex]))
+		{
+			vertexIndex++;
+		}
+		return vertexIndex;
+	}
+
+    private void markedVisNode(T vertex)
+	{
+		int vertexIndex = getVertexIndex(vertex);
+		visitedVertices[vertexIndex] = true;
+	}
+	
+	private boolean hasUnvisitedNeighbor(T vertex)
+	{
+		int vertexIndex = getVertexIndex(vertex);
+		
+		int[] neighbors = neighbors(vertexIndex);
+		boolean hasUnvisited = false;
+		for (int nextNeighbor = 0; nextNeighbor <= neighbors.length - 1; nextNeighbor++)
+		{
+			if (!visitedVertices[neighbors[nextNeighbor]])
+			{
+				hasUnvisited = true;
+				nextNeighbor = neighbors.length;
+			}
+		}
+		return hasUnvisited;
+	}
+	
+	private T getNextUnvisitedNeighbor(T vertex)
+	{
+		int vertexIndex = getVertexIndex(vertex);
+		
+		int[] neighbors = neighbors(vertexIndex);
+		T nextUnvisitedNeighbor = labels[0];
+		for (int nextNeighbor = 0; nextNeighbor <= neighbors.length - 1; nextNeighbor++)
+		{
+			if (!visitedVertices[neighbors[nextNeighbor]])
+			{
+				nextUnvisitedNeighbor = labels[neighbors[nextNeighbor]];
+				nextNeighbor = neighbors.length;
+			}
+		}
+		return nextUnvisitedNeighbor;
+	}
+    //------------------------------------------------------------------------------------------------------------//
+
+    public QueueInterface<T> BFSTraversal(int originVertex)
+    {
+        T nextNeighbor;
+        int[] neighbors;
+        T frontVert;
+        int frontVertNum = originVertex;
+        //The initialization of the queues used to house all the nodes and their respective integer values 
+        QueueInterface<T> travQueue = new ArrayQueue<>();
+        QueueInterface<T> vertQueue = new ArrayQueue<>();
+        boolean[] visited = new boolean[(labels.length)];
+        //Sets the vertex already to the vertex provided, we mark the vertex here
+        //the marked vertex allows us to run the rest of the linked nodes.
+        visited[0] = true;
+        travQueue.enqueue(labels[0]);
+        vertQueue.enqueue(labels[0]);
+        //This while loop changes the vertex to the newest neighbor, 
+        // allowing it to run through the algorithm to detect its neighbors and report it to the vertQueue
+        // In the while loop, there is a for loop that allows a check to see if the vertex has --->
+        // 1) been assigned already, or 2) has a neighbor,
+        //If it has a neighbor, it runs through the process of adding it to the vertex queue 
+        // and the vertex queue we just assigned to the traversal queue--> (what we report)
+        while(!vertQueue.isEmpty()) 
+        {
+            //takes out the node from the vertex queue because we have now visited the node and made it the new vertex
+            frontVert = vertQueue.dequeue();
+            //checks to see if the vertex is a new vertex or a mistake in code
+            for(int i = 0; i < labels.length; i++) 
+                if(labels[i] == frontVert)
+                    frontVertNum = i;
+            //If the vertex has neighbors the code is run and allows the algorithm to add those neighbors to the queue
+            if(neighbors(frontVertNum).length != 0 ) 
+            {
+                //The algorithm that was written for the neighbors method is run and that allows us to 
+                //see the number of edges and nodes connected to the specific vertex we have highlighted.
+                neighbors = neighbors(frontVertNum);
+                for(int i = 0; i < neighbors.length; i++)
+                {
+                    nextNeighbor = labels[neighbors[i]];                    
+                   
+                   //if the nodes that are seen to be connected have not been visited and marked,
+                   // add the node to the vertQueue and the vertex we are now on to the traveQueue
+                    if(!visited[neighbors[i]])
+                    {
+                        visited[neighbors[i]] = true;
+                        travQueue.enqueue(nextNeighbor);
+                        vertQueue.enqueue(nextNeighbor);
+                    }
+                }
+            }
+        }
+        return travQueue;
+    }
+//-------------------------------------------------------------------------------------------------------------------//
+    public QueueInterface<T> DFSTraversal(T origin)
+	{
+        // The DFS Traversal method is very much like the BFS traversal method.
+        // the only change is the stack used to house the nodes on what we have taken to get to the current vertex
+        // this is because depth traversal is more like a chain link in that we record the nodes we pass by
+        // every time we pop it out the stack.
+        StackInterface<T> vertexStack = new LinkedStack<T>();
+		QueueInterface<T> travQueue = new ArrayQueue<T>();
+		
+        //Just like BFS Traversal, we set up the origin as the orignal vertex with the priority designation as 0
+        // From there we can continue as normal.
+		visitedVertices[0] = true;
+
+		travQueue.enqueue(labels[getVertexIndex(origin)]);
+		vertexStack.push(labels[getVertexIndex(origin)]);
+
+		while (!vertexStack.isEmpty())
+		{
+            // THE BIG DIFFERENCE BETWEEN THIS AND BFS 
+            // We pop the top of the visited stack.
+            // This lets us add on to the traversal queue and report it. 
+			T topVertex = vertexStack.peek();
+			if (hasUnvisitedNeighbor(topVertex))
+			{
+				T nextNeighbor = getNextUnvisitedNeighbor(topVertex);
+				markedVisNode(nextNeighbor);
+				travQueue.enqueue(nextNeighbor);
+				vertexStack.push(nextNeighbor);
+			}
+			else
+            // This is the catch to help us pop the node if the node is already visited and added to the stack
+			{
+				vertexStack.pop();
+			}
+		}
+		
+		return travQueue;
+	}
 }
